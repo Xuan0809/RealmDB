@@ -1,6 +1,6 @@
-package com.example.realmdbtest.CycleDB;
+package com.example.realmdb.DB.Table;
 
-import java.io.Serializable;
+import java.util.HashMap;
 import java.util.Map;
 
 import io.realm.RealmObject;
@@ -56,16 +56,32 @@ public class SystemDefault extends RealmObject implements DBInterface {
 
     @Override
     public Map<String, Object> toMap() {
-        return null;
+        Map<String,Object> map = new HashMap<>();
+        map.put("User",User);
+        map.put("LightStatus",LightStatus);
+        map.put("BackLightLevel",BackLightLevel);
+        map.put("LightMode",LightMode);
+        map.put("UsBackgroundModeer",BackgroundMode);
+        map.put("RidingMode",RidingMode);
+        map.put("GearPosition",GearPosition);
+        map.put("Unit",Unit);
+        return map;
     }
 
     @Override
     public void fromMap(Map<String, Object> map) {
-
+        User = (String) map.get("User");
+        LightStatus = (boolean) map.get("LightStatus");
+        BackLightLevel = (int) map.get("BackLightLevel");
+        LightMode = (int) map.get("LightMode");
+        BackgroundMode = (int) map.get("BackgroundMode");
+        RidingMode = (int) map.get("RidingMode");
+        GearPosition = (int) map.get("GearPosition");
+        Unit = (String) map.get("Unit");
     }
 
     @Override
-    public Class<? extends RealmObject> getType() {
-        return null;
+    public Class<SystemDefault> getType() {
+        return SystemDefault.class;
     }
 }

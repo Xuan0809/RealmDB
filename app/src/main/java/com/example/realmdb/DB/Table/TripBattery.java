@@ -1,11 +1,10 @@
-package com.example.realmdbtest.CycleDB;
+package com.example.realmdb.DB.Table;
 
-import java.io.Serializable;
+import java.util.HashMap;
 import java.util.Map;
 
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
-import io.realm.annotations.Required;
 
 public class TripBattery extends RealmObject implements DBInterface {
     @PrimaryKey
@@ -60,16 +59,26 @@ public class TripBattery extends RealmObject implements DBInterface {
 
     @Override
     public Map<String, Object> toMap() {
-        return null;
+        Map<String,Object> map = new HashMap<>();
+        map.put ("MissionID",MissionID);
+        map.put("ControllerGear",ControllerGear);
+        map.put("ControllerRight",ControllerRight);
+        map.put("Ebike",Ebike);
+        map.put("CycleComputer",CycleComputer);
+        return map;
     }
 
     @Override
     public void fromMap(Map<String, Object> map) {
-
+        MissionID = (int)map.get("MissionID");
+        ControllerGear = (int)map.get("ControllerGear");
+        ControllerRight = (int)map.get("ControllerRight");
+        Ebike = (int)map.get("Ebike");
+        CycleComputer = (int)map.get("CycleComputer");
     }
 
     @Override
-    public Class<? extends RealmObject> getType() {
-        return null;
+    public Class<TripBattery> getType() {
+        return TripBattery.class;
     }
 }

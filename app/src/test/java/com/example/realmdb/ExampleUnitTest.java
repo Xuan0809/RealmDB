@@ -1,4 +1,4 @@
-package com.example.realmdbtest;
+package com.example.realmdb;
 
 import org.junit.Test;
 

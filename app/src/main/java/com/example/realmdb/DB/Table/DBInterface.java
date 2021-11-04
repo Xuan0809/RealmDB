@@ -1,4 +1,4 @@
-package com.example.realmdbtest.CycleDB;
+package com.example.realmdb.DB.Table;
 
 import java.util.Map;
 

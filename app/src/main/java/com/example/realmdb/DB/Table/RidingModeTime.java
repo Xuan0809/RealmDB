@@ -1,6 +1,5 @@
-package com.example.realmdbtest.CycleDB;
+package com.example.realmdb.DB.Table;
 
-import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -8,7 +7,6 @@ import java.util.Map;
 import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
-import io.realm.annotations.Required;
 
 public class RidingModeTime extends RealmObject implements DBInterface {
     @PrimaryKey
@@ -55,7 +53,7 @@ public class RidingModeTime extends RealmObject implements DBInterface {
     }
 
     @Override
-    public Class<? extends RealmObject> getType()  {
+    public Class<RidingModeTime> getType()  {
         return RidingModeTime.class;
     }
 }

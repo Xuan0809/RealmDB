@@ -1,50 +1,52 @@
-package com.example.realmdbtest.DBFunction;
+package com.example.realmdb.DB.CRUD;
 
-import android.util.Log;
-
-import com.example.realmdbtest.CycleDB.DBInterface;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.example.realmdb.DB.RealmManager;
+import com.example.realmdb.DB.Table.DBInterface;
 
 import io.realm.RealmObject;
+import io.realm.RealmQuery;
 import io.realm.RealmResults;
 import io.realm.exceptions.RealmException;
 
 public class Query {
 
-    public void TestQuery(){
-//        MapInfo info = new MapInfo();
-//        info.setVersion("1.0.0");
-//        Insert(info);
-    }
-
-    // 搜尋資料庫
-    public <T extends RealmObject> void SearchData(Class<T> obj , DBInterface Interface,String fieldName,String value) throws RealmException {
-
-        // Search Test 2 加入搜尋條件
-        RealmResults<T> MyResult1 = RealmManager.getRealm().where(obj).contains(fieldName,value).findAll();
-        // 遍歷所有資料 (每一筆)
-        for(T i:MyResult1) {
-            // 顯示出每一筆的 Username
-            Log.d("TAG","HaveSearch :" + i.toString());
-        }
-    }
-
     // 搜尋資料庫,最新的 pk id
-    public <T extends RealmObject> int SearchData_ID(Class<T> obj , DBInterface Interface) throws RealmException {
+    public <T extends RealmObject> int SearchFirstID(Class<T> obj, DBInterface Interface) throws RealmException {
 
         Number maxid = RealmManager.getRealm().where(obj).max("id");
 
         // Empty Table
-        if (maxid == null){
+        if (maxid == null) {
             return 0;
-        }
-        else{
+        } else {
             // 取最新的 id
-            return Integer.parseInt(maxid.toString()) ;
+            return Integer.parseInt(maxid.toString());
         }
     }
+
+    // 搜尋單一條件下
+    public RealmResults SearchData(Class obj, String fieldName, String value) throws RealmException {
+
+        String[] valueAdapter = {value};
+
+        return SearchData(obj,fieldName,valueAdapter);
+    }
+
+    // 搜尋複數條件下
+    public RealmResults SearchData(Class obj ,String fieldName, String[] value) throws RealmException {
+
+        RealmQuery Query = RealmManager.getRealm().where(obj);
+
+        for (int i = 0 ; i < value.length;i++){
+            Query = Query.contains(fieldName, value[i]);
+        }
+
+        RealmResults MyResult = Query.findAll();
+
+        return MyResult;
+    }
+
+
 }
 
 //class OLDQuery{
@@ -52,7 +54,7 @@ public class Query {
 //     // 搜尋資料庫 For User
 //     public void SearchData() throws RealmException {
 
-         // Search Test 1 搜尋全部
+// Search Test 1 搜尋全部
        /* RealmResults<User> MyResult =
                 realm.where(User.class).findAll();
         // 遍歷所有資料 (每一筆)
@@ -63,7 +65,7 @@ public class Query {
             Log.d("results", i.getId());*//*
         }*/
 
-         // Search Test 2 加入搜尋條件
+// Search Test 2 加入搜尋條件
         /*RealmResults<User> MyResult1 = realm.where(User.class).contains("username","S" ).findAll();
         // 遍歷所有資料 (每一筆)
         for(User i:MyResult1) {
@@ -73,8 +75,8 @@ public class Query {
             Log.d("results", i.getId());*//*
         }*/
 
-         // Search Test 2 也能這樣打
-         // 創建搜尋庫
+// Search Test 2 也能這樣打
+// 創建搜尋庫
 //         RealmQuery<User> MyQueue = RealmManager.getRealm().where(User.class);
 //         // 委派命令句
 //         RealmResults<User> MyResult1 = MyQueue.contains("username", "X").findAll();

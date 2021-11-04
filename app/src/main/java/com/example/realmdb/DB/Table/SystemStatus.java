@@ -1,7 +1,7 @@
-package com.example.realmdbtest.CycleDB;
+package com.example.realmdb.DB.Table;
 
-import java.io.Serializable;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 import io.realm.RealmObject;
@@ -33,16 +33,22 @@ public class SystemStatus extends RealmObject implements DBInterface {
 
     @Override
     public Map<String, Object> toMap() {
-        return null;
+        Map<String,Object> map = new HashMap<>();
+        map.put("BikeUID",BikeUID);
+        map.put("UsedTime",UsedTime);
+        map.put("RidingTime",RidingTime);
+        return map;
     }
 
     @Override
     public void fromMap(Map<String, Object> map) {
-
+        BikeUID = (String) map.get("BikeUID");
+        UsedTime = (Date) map.get("UsedTime");
+        RidingTime = (Date) map.get("RidingTime");
     }
 
     @Override
-    public Class<? extends RealmObject> getType() {
-        return null;
+    public Class<SystemStatus> getType() {
+        return SystemStatus.class;
     }
 }

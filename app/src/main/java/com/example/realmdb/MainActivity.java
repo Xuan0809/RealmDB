@@ -1,32 +1,20 @@
-package com.example.realmdbtest;
+package com.example.realmdb;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.util.Log;
 
-import com.example.realmdbtest.CycleDB.MapInfo;
-import com.example.realmdbtest.CycleDB.RidingMode;
-import com.example.realmdbtest.CycleDB.TripHistory;
-import com.example.realmdbtest.DBFunction.Delete;
-import com.example.realmdbtest.DBFunction.Insert;
-import com.example.realmdbtest.DBFunction.Query;
-import com.example.realmdbtest.DBFunction.RealmManager;
-import com.example.realmdbtest.DBFunction.Update;
+import com.example.realmdb.DB.Table.MapInfo;
+import com.example.realmdb.DB.CRUD.Delete;
+import com.example.realmdb.DB.CRUD.Insert;
+import com.example.realmdb.DB.CRUD.Query;
+import com.example.realmdb.DB.RealmManager;
+import com.example.realmdb.DB.CRUD.Update;
 
-import java.io.Serializable;
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
-import java.util.UUID;
 
-import io.realm.Realm;
-import io.realm.RealmConfiguration;
-import io.realm.RealmQuery;
 import io.realm.RealmResults;
 import io.realm.exceptions.RealmException;
 
@@ -57,17 +45,17 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        // Delete
-        DelData();
-
         // Update
         UpdateData();
 
-        // Query
-        SearchData();
+        // Delete
+        DelData();
 
         // 搜尋最新 id
         SearchID();
+
+        // Query
+        SearchData();
 
         // Close RealmDB
         RealmManager.close();
@@ -84,12 +72,12 @@ public class MainActivity extends AppCompatActivity {
         info.setUpdateDate(date);
 
         // 搜尋最新一筆資料的 id
-        int id = query.SearchData_ID(info.getType(), info);
+        int id = query.SearchFirstID(info.getType(), info);
         // 手動增量
         if (id != 0) {
-            insert.Insert(info, id + 1);
+            insert.InsertData(info, id + 1);
         } else {
-            insert.Insert(info, 1);
+            insert.InsertData(info, 1);
         }
 
 //        RidingMode info = new RidingMode();
@@ -117,27 +105,29 @@ public class MainActivity extends AppCompatActivity {
 //        }
     }
 
-    // 搜尋資料庫，FieldName & 內容 搜尋
-    public void SearchData() throws RealmException {
+    // 更新資料，搜尋 FieldName,Value ，更改 FieldName,Value
+    public void UpdateData() throws RealmException {
         MapInfo info = new MapInfo();
-        query.SearchData(info.getType(), info, "Version", "0.0");
-    }
-
-    // 找到最新資料 id
-    public void SearchID() throws RealmException {
-        MapInfo info = new MapInfo();
-        query.SearchData_ID(info.getType(), info);
+        update.UpdateData(info.getType(), "Version", "1", "Version", "2.0.0");
     }
 
     // 刪除資料，關鍵字全刪
     public void DelData() throws RealmException {
         MapInfo info = new MapInfo();
-        delete.DelData(info.getType(), info, "Version", "2.0.0");
+        delete.DeleteAllData(info.getType(), info, "Version", "1.0.0");
     }
 
-    // 更新資料，搜尋 FieldName,Value ，更改 FieldName,Value
-    public void UpdateData() throws RealmException {
+    // 找到最新資料 id
+    public void SearchID() throws RealmException {
         MapInfo info = new MapInfo();
-        update.UpdateData(info.getType(), info, "Version", "1", "Version", "2.0.0");
+        query.SearchFirstID(info.getType(), info);
+    }
+
+    // 搜尋資料庫，FieldName & 內容 搜尋
+    public void SearchData() throws RealmException {
+        MapInfo info = new MapInfo();
+        RealmResults result =query.SearchData(info.getType(), "Version", "2.0.0");
+
+        Log.d("TAG",result.toString());
     }
 }

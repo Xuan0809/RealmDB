@@ -1,13 +1,11 @@
-package com.example.realmdbtest.CycleDB;
+package com.example.realmdb.DB.Table;
 
-import java.io.Serializable;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
-import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
-import io.realm.annotations.Required;
 
 // 騎乘歷史紀錄
 public class TripHistory extends RealmObject implements DBInterface {
@@ -44,9 +42,6 @@ public class TripHistory extends RealmObject implements DBInterface {
     private float TMaxSpeed;
     private float TAVGSpeed;
     private float RAVGSpeed;
-
-
-
 
     public Date getDate() { return Date; }
     public void setDate(Date Date) { this.Date = Date; }
@@ -98,17 +93,51 @@ public class TripHistory extends RealmObject implements DBInterface {
 
     @Override
     public Map<String, Object> toMap() {
-        return null;
+        Map<String,Object> map = new HashMap<>();
+        map.put("MissionID",MissionID);
+        map.put("Date",Date);
+        map.put("TravleStart",TravleStart);
+        map.put("Startlongitude",Startlongitude);
+        map.put("Startlatitude",Startlatitude);
+        map.put("TravelEnd",TravelEnd);
+        map.put("Endlongitude",Endlongitude);
+        map.put("Endlatitude",Endlatitude);
+        map.put("TripStart",TripStart);
+        map.put("TripEnd",TripEnd);
+        map.put("TripDistance",TripDistance);
+        map.put("RidingTime",RidingTime);
+        map.put("Rpause",Rpause);
+        map.put("TripTime",TripTime);
+        map.put("TMaxSpeed",TMaxSpeed);
+        map.put("TAVGSpeed",TAVGSpeed);
+        map.put("RAVGSpeed",RAVGSpeed);
+        return map;
     }
 
     @Override
     public void fromMap(Map<String, Object> map) {
-
+        MissionID = (int) map.get("MissionID");
+        Date = (Date) map.get("Date");
+        TravleStart = (String) map.get("TravleStart");
+        Startlongitude = (float) map.get("Startlongitude");
+        Startlatitude = (float) map.get("Startlatitude");
+        TravelEnd = (String) map.get("TravelEnd");
+        Endlongitude = (float) map.get("Endlongitude");
+        Endlatitude = (float) map.get("Endlatitude");
+        TripStart = (String) map.get("TripStart");
+        TripEnd = (String) map.get("TripEnd");
+        TripDistance = (float) map.get("TripDistance");
+        RidingTime = (Date) map.get("RidingTime");
+        Rpause = (Date) map.get("Rpause");
+        TripTime = (Date) map.get("TripTime");
+        TMaxSpeed = (float) map.get("TMaxSpeed");
+        TAVGSpeed = (float) map.get("TAVGSpeed");
+        RAVGSpeed = (float) map.get("RAVGSpeed");
     }
 
     @Override
-    public Class<? extends RealmObject> getType() {
-        return null;
+    public Class<TripHistory> getType() {
+        return TripHistory.class;
     }
 }
 

@@ -1,41 +1,40 @@
-package com.example.realmdbtest.DBFunction;
+package com.example.realmdb.DB;
 
 import android.content.Context;
-import android.util.Log;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 
 public class RealmManager {
 
-    private static Realm realm = null;
+    private static Realm mRealm = null;
 
     public static Realm getRealm() { // use on UI thread only!
-        return realm;
+        return mRealm;
     }
 
     // 初始化
     public static void init(Context context) {
-        if(realm == null){
+        if(mRealm == null){
             Realm.init(context);
 
             // MyDB
             String realmName = "db.realm";
             RealmConfiguration config = new RealmConfiguration.Builder().name(realmName).build();
 
-            realm = Realm.getInstance(config);
+            mRealm = Realm.getInstance(config);
         }
     }
 
     public static void beginTransaction() {
-        realm.beginTransaction();
+        mRealm.beginTransaction();
     }
 
     public static void commitTransaction() {
-        realm.commitTransaction();
+        mRealm.commitTransaction();
     }
 
     public static void close(){
-        realm.close();
+        mRealm.close();
     }
 }
