@@ -19,7 +19,7 @@ public class RealmManager {
             Realm.init(context);
 
             // MyDB
-            String realmName = "db.realm";
+            String realmName = "db1.realm";
             RealmConfiguration config = new RealmConfiguration.Builder().name(realmName).build();
 
             mRealm = Realm.getInstance(config);

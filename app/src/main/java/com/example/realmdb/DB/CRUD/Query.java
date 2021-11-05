@@ -1,7 +1,12 @@
 package com.example.realmdb.DB.CRUD;
 
+import android.util.Log;
+import android.widget.Switch;
+
 import com.example.realmdb.DB.RealmManager;
 import com.example.realmdb.DB.Table.DBInterface;
+
+import java.util.Date;
 
 import io.realm.RealmObject;
 import io.realm.RealmQuery;
@@ -25,20 +30,29 @@ public class Query {
     }
 
     // 搜尋單一條件下
-    public RealmResults SearchData(Class obj, String fieldName, String value) throws RealmException {
+    public RealmResults SearchData(Class obj, String fieldName, Object value) throws RealmException {
 
-        String[] valueAdapter = {value};
+        String[] fieldNameAdapter = {fieldName};
+        Object[] valueAdapter = {value};
 
-        return SearchData(obj,fieldName,valueAdapter);
+        return SearchData(obj, fieldNameAdapter, valueAdapter);
     }
 
     // 搜尋複數條件下
-    public RealmResults SearchData(Class obj ,String fieldName, String[] value) throws RealmException {
+    public RealmResults SearchData(Class obj, String fieldName[], Object[] value) throws RealmException {
 
         RealmQuery Query = RealmManager.getRealm().where(obj);
 
-        for (int i = 0 ; i < value.length;i++){
-            Query = Query.contains(fieldName, value[i]);
+        for (int i = 0; i < value.length; i++) {
+            if (value[i] instanceof String) {
+                Query = Query.containsValue(fieldName[i], value[i].toString());
+            } else if (value[i] instanceof Integer) {
+                Query = Query.containsValue(fieldName[i], (int) value[i]);
+            } else if (value[i] instanceof Float) {
+                Query = Query.containsValue(fieldName[i], (float) value[i]);
+            } else if (value[i] instanceof Date) {
+                Query = Query.containsValue(fieldName[i], (Date) value[i]);
+            }
         }
 
         RealmResults MyResult = Query.findAll();

@@ -2,41 +2,49 @@ package com.example.realmdb.DB.CRUD;
 
 import com.example.realmdb.DB.RealmManager;
 
+import java.util.Date;
+
 import io.realm.RealmQuery;
 import io.realm.RealmResults;
 import io.realm.exceptions.RealmException;
 
 public class Update {
 
+    private Query query = new Query();
+
     // 單一條件下,更新單筆資料
-    public String UpdateData(Class obj,String fieldName,String value,String updatefield,String updatevalue) throws RealmException {
+    public String UpdateData(Class obj, String fieldName, Object value, String updatefield, Object updatevalue) throws RealmException {
 
-        String[] ValueAdapter = {value};
+        String[] fieldNameAdapter = {fieldName};
+        Object[] ValueAdapter = {value};
         String[] UpdatefieldAdapter = {updatefield};
-        String[] UpdatevalueAdapter = {updatevalue};
+        Object[] UpdatevalueAdapter = {updatevalue};
 
-        return UpdateData(obj,fieldName,ValueAdapter,UpdatefieldAdapter,UpdatevalueAdapter);
+        return UpdateData(obj, fieldNameAdapter, ValueAdapter, UpdatefieldAdapter, UpdatevalueAdapter);
     }
 
     // 複數條件下,更新數筆資料
-    public String UpdateData(Class obj, String fieldName, String[] value, String[] updatefield, String[] updatevalue) throws RealmException {
+    public String UpdateData(Class obj, String[] fieldName, Object[] value, String[] updatefield, Object[] updatevalue) throws RealmException {
 
         String result = "Successed";
 
         // 開啟任務
         RealmManager.beginTransaction();
 
-        RealmQuery Query = RealmManager.getRealm().where(obj);
+        // 找出欲刪除的資料
+        RealmResults MyResult = query.SearchData(obj,fieldName,value);
 
-        for (int i = 0 ; i < value.length ; i ++){
-            Query = Query.contains(fieldName,value[i]);
-        }
+        for (int f = 0; f < updatefield.length; f++) {
 
-        // 尋找全部相符的
-        RealmResults MyResult = Query.findAll();
-
-        for (int i = 0 ; i < updatefield.length ; i++){
-            MyResult.setString(updatefield[i],updatevalue[i]);
+            if (updatevalue[f] instanceof String) {
+                MyResult.setString(updatefield[f], updatevalue[f].toString());
+            } else if (updatevalue[f] instanceof Integer) {
+                MyResult.setInt(updatefield[f], (int) updatevalue[f]);
+            } else if (updatevalue[f] instanceof Float) {
+                MyResult.setFloat(updatefield[f], (float) updatevalue[f]);
+            } else if (updatevalue[f] instanceof Date) {
+                MyResult.setDate(updatefield[f], (Date) updatevalue[f]);
+            }
         }
 
         // 關閉任務

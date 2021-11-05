@@ -17,11 +17,11 @@ public class RidingMode extends RealmObject implements DBInterface {
         this.id = id;
     }
 
-    private int RidingMode;
+    private int Mode;
     private String Name;
 
-    public int getRidingMode() {return  RidingMode;}
-    public void setRidingMode(int RidingMode ) {this.RidingMode =RidingMode;}
+    public int getMode() {return  Mode;}
+    public void setMode(int RidingMode ) {this.Mode =RidingMode;}
 
     public String getName() {return  Name;}
     public void setName(String Name) {this.Name = Name;}
@@ -29,14 +29,14 @@ public class RidingMode extends RealmObject implements DBInterface {
     @Override
     public Map<String, Object> toMap() {
         Map<String,Object> map = new HashMap<>();
-        map.put("RidingMode",RidingMode);
+        map.put("Mode",Mode);
         map.put("Name",Name);
         return map;
     }
 
     @Override
     public void fromMap(Map<String, Object> map) {
-        RidingMode = (int) map.get("RidingMode");
+        Mode = (int) map.get("Mode");
         Name = (String) map.get("Name");
     }
 

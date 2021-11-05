@@ -27,11 +27,11 @@ public class RidingModeTime extends RealmObject implements DBInterface {
     public void setMissionID(int MissionID) { this.MissionID = MissionID; }
 
     // Foreign key RidingMode
-    private RealmList<RidingMode> RidingMode;
+    private int ModeId;
     private Date Date;
 
-    public RealmList<RidingMode> getRidingMode() { return RidingMode; }
-    public void setRidingMode(RealmList<RidingMode> RidingMode) { this.RidingMode = RidingMode; }
+    public int getModeId() { return ModeId; }
+    public void setModeId(int ModeId) { this.ModeId = ModeId; }
 
     public Date getDate() {return Date;}
     public void setDate(Date Date) {this.Date=Date;}
@@ -40,7 +40,7 @@ public class RidingModeTime extends RealmObject implements DBInterface {
     public Map<String, Object> toMap() {
         Map<String,Object> map = new HashMap<>();
         map.put("MissionID",MissionID);
-        map.put("RidingMode",RidingMode);
+        map.put("ModeId",ModeId);
         map.put("Date",Date);
         return map;
     }
@@ -48,7 +48,7 @@ public class RidingModeTime extends RealmObject implements DBInterface {
     @Override
     public void fromMap(Map<String, Object> map) {
         MissionID = (int) map.get("MissionID");
-        RidingMode = (RealmList<RidingMode>) map.get("RidingMode");
+        ModeId = (int) map.get("ModeId");
         Date = (Date) map.get("Date");
     }
 
