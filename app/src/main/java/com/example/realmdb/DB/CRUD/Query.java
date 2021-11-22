@@ -16,7 +16,7 @@ import io.realm.exceptions.RealmException;
 public class Query {
 
     // 搜尋資料庫,最新的 pk id
-    public <T extends RealmObject> int SearchFirstID(Class<T> obj, DBInterface Interface) throws RealmException {
+    public <T extends RealmObject> int SearchFirstID(Class obj) throws RealmException {
 
         Number maxid = RealmManager.getRealm().where(obj).max("id");
 
@@ -59,8 +59,6 @@ public class Query {
 
         return MyResult;
     }
-
-
 }
 
 //class OLDQuery{

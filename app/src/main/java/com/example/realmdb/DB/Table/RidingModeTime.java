@@ -1,5 +1,7 @@
 package com.example.realmdb.DB.Table;
 
+import com.example.realmdb.DB.RealmManager;
+
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -8,7 +10,19 @@ import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
-public class RidingModeTime extends RealmObject implements DBInterface {
+public class RidingModeTime extends RealmObject {
+
+    public RidingModeTime(){
+        Number maxId =  RealmManager.getQuery().SearchFirstID(this.getClass());
+        if (maxId == null) {
+            this.id = 1;
+        } else {
+            this.id = maxId.intValue() + 1;
+        }
+
+        this.Date = System.currentTimeMillis();
+    }
+
     @PrimaryKey
     private int id; // Primary Key
 
@@ -28,32 +42,12 @@ public class RidingModeTime extends RealmObject implements DBInterface {
 
     // Foreign key RidingMode
     private int ModeId;
-    private Date Date;
+    private long Date;
 
     public int getModeId() { return ModeId; }
     public void setModeId(int ModeId) { this.ModeId = ModeId; }
 
-    public Date getDate() {return Date;}
-    public void setDate(Date Date) {this.Date=Date;}
+    public long getDate() {return Date;}
+    public void setDate(long Date) {this.Date=Date;}
 
-    @Override
-    public Map<String, Object> toMap() {
-        Map<String,Object> map = new HashMap<>();
-        map.put("MissionID",MissionID);
-        map.put("ModeId",ModeId);
-        map.put("Date",Date);
-        return map;
-    }
-
-    @Override
-    public void fromMap(Map<String, Object> map) {
-        MissionID = (int) map.get("MissionID");
-        ModeId = (int) map.get("ModeId");
-        Date = (Date) map.get("Date");
-    }
-
-    @Override
-    public Class<RidingModeTime> getType()  {
-        return RidingModeTime.class;
-    }
 }

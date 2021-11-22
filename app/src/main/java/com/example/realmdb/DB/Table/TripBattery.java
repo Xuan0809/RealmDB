@@ -1,12 +1,24 @@
 package com.example.realmdb.DB.Table;
 
+import com.example.realmdb.DB.RealmManager;
+
 import java.util.HashMap;
 import java.util.Map;
 
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
-public class TripBattery extends RealmObject implements DBInterface {
+public class TripBattery extends RealmObject{
+
+    public TripBattery(){
+        Number maxId =  RealmManager.getQuery().SearchFirstID(this.getClass());
+        if (maxId == null) {
+            this.id = 1;
+        } else {
+            this.id = maxId.intValue() + 1;
+        }
+    }
+
     @PrimaryKey
     private int id; // Primary Key
 
@@ -57,28 +69,4 @@ public class TripBattery extends RealmObject implements DBInterface {
         this.CycleComputer = CycleComputer;
     }
 
-    @Override
-    public Map<String, Object> toMap() {
-        Map<String,Object> map = new HashMap<>();
-        map.put ("MissionID",MissionID);
-        map.put("ControllerGear",ControllerGear);
-        map.put("ControllerRight",ControllerRight);
-        map.put("Ebike",Ebike);
-        map.put("CycleComputer",CycleComputer);
-        return map;
-    }
-
-    @Override
-    public void fromMap(Map<String, Object> map) {
-        MissionID = (int)map.get("MissionID");
-        ControllerGear = (int)map.get("ControllerGear");
-        ControllerRight = (int)map.get("ControllerRight");
-        Ebike = (int)map.get("Ebike");
-        CycleComputer = (int)map.get("CycleComputer");
-    }
-
-    @Override
-    public Class<TripBattery> getType() {
-        return TripBattery.class;
-    }
 }

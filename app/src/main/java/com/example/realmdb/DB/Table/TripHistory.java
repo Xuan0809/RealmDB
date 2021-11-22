@@ -1,5 +1,7 @@
 package com.example.realmdb.DB.Table;
 
+import com.example.realmdb.DB.RealmManager;
+
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -8,7 +10,19 @@ import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
 // 騎乘歷史紀錄
-public class TripHistory extends RealmObject implements DBInterface {
+public class TripHistory extends RealmObject {
+
+    public TripHistory(){
+        Number maxId =  RealmManager.getQuery().SearchFirstID(this.getClass());
+        if (maxId == null) {
+            this.id = 1;
+        } else {
+            this.id = maxId.intValue() + 1;
+        }
+
+        this.Date = System.currentTimeMillis();
+    }
+
     @PrimaryKey
     private int id; // Primary Key
 
@@ -26,7 +40,7 @@ public class TripHistory extends RealmObject implements DBInterface {
     }
     public void setMissionID(int MissionID) { this.MissionID = MissionID; }
 
-    private Date Date;
+    private long Date;
     private String TravleStart;
     private float Startlongitude;
     private float Startlatitude;
@@ -43,8 +57,8 @@ public class TripHistory extends RealmObject implements DBInterface {
     private float TAVGSpeed;
     private float RAVGSpeed;
 
-    public Date getDate() { return Date; }
-    public void setDate(Date Date) { this.Date = Date; }
+    public long getDate() { return Date; }
+    public void setDate(long Date) { this.Date = Date; }
 
     public String getTravleStart() { return TravleStart; }
     public void setTravleStart(String TravleStart) { this.TravleStart = TravleStart; }
@@ -90,54 +104,5 @@ public class TripHistory extends RealmObject implements DBInterface {
 
     public float getRAVGSpeed() { return RAVGSpeed; }
     public void setRAVGSpeed(float RAVGSpeed) { this.RAVGSpeed = RAVGSpeed; }
-
-    @Override
-    public Map<String, Object> toMap() {
-        Map<String,Object> map = new HashMap<>();
-        map.put("MissionID",MissionID);
-        map.put("Date",Date);
-        map.put("TravleStart",TravleStart);
-        map.put("Startlongitude",Startlongitude);
-        map.put("Startlatitude",Startlatitude);
-        map.put("TravelEnd",TravelEnd);
-        map.put("Endlongitude",Endlongitude);
-        map.put("Endlatitude",Endlatitude);
-        map.put("TripStart",TripStart);
-        map.put("TripEnd",TripEnd);
-        map.put("TripDistance",TripDistance);
-        map.put("RidingTime",RidingTime);
-        map.put("Rpause",Rpause);
-        map.put("TripTime",TripTime);
-        map.put("TMaxSpeed",TMaxSpeed);
-        map.put("TAVGSpeed",TAVGSpeed);
-        map.put("RAVGSpeed",RAVGSpeed);
-        return map;
-    }
-
-    @Override
-    public void fromMap(Map<String, Object> map) {
-        MissionID = (int) map.get("MissionID");
-        Date = (Date) map.get("Date");
-        TravleStart = (String) map.get("TravleStart");
-        Startlongitude = (float) map.get("Startlongitude");
-        Startlatitude = (float) map.get("Startlatitude");
-        TravelEnd = (String) map.get("TravelEnd");
-        Endlongitude = (float) map.get("Endlongitude");
-        Endlatitude = (float) map.get("Endlatitude");
-        TripStart = (String) map.get("TripStart");
-        TripEnd = (String) map.get("TripEnd");
-        TripDistance = (float) map.get("TripDistance");
-        RidingTime = (Date) map.get("RidingTime");
-        Rpause = (Date) map.get("Rpause");
-        TripTime = (Date) map.get("TripTime");
-        TMaxSpeed = (float) map.get("TMaxSpeed");
-        TAVGSpeed = (float) map.get("TAVGSpeed");
-        RAVGSpeed = (float) map.get("RAVGSpeed");
-    }
-
-    @Override
-    public Class<TripHistory> getType() {
-        return TripHistory.class;
-    }
 }
 

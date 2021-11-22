@@ -1,5 +1,7 @@
 package com.example.realmdb.DB.Table;
 
+import com.example.realmdb.DB.RealmManager;
+
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -7,7 +9,19 @@ import java.util.Map;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
-public class SoftwareInfo extends RealmObject implements DBInterface {
+public class SoftwareInfo extends RealmObject {
+
+    public SoftwareInfo(){
+        Number maxId =  RealmManager.getQuery().SearchFirstID(this.getClass());
+        if (maxId == null) {
+            this.id = 1;
+        } else {
+            this.id = maxId.intValue() + 1;
+        }
+
+        this.Date = System.currentTimeMillis();
+    }
+
     @PrimaryKey
     private int id; // Primary Key
 
@@ -19,30 +33,12 @@ public class SoftwareInfo extends RealmObject implements DBInterface {
     }
 
     private String Version;
-    private Date Date;
+    private long Date;
 
     public String getVersion() { return Version;}
     public void  setVersion(String Version) { this.Version =Version;}
 
-    public Date getDate() { return Date;}
-    public void setDate(Date Date) { this.Date = Date; }
+    public long getDate() { return Date;}
+    public void setDate(long Date) { this.Date = Date; }
 
-    @Override
-    public Map<String, Object> toMap() {
-        Map<String,Object> map = new HashMap<>();
-        map.put("Version",Version);
-        map.put("Date",Date);
-        return map;
-    }
-
-    @Override
-    public void fromMap(Map<String, Object> map) {
-        Version = (String) map.get("Version");
-        Date = (Date) map.get("Date");
-    }
-
-    @Override
-    public Class<SoftwareInfo> getType() {
-        return SoftwareInfo.class;
-    }
 }

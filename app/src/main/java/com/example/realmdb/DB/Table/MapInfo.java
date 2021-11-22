@@ -1,5 +1,7 @@
 package com.example.realmdb.DB.Table;
 
+import com.example.realmdb.DB.RealmManager;
+
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -7,7 +9,19 @@ import java.util.Map;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
-public class MapInfo extends RealmObject implements DBInterface {
+public class MapInfo extends RealmObject {
+
+    public MapInfo(){
+        Number maxId =  RealmManager.getQuery().SearchFirstID(this.getClass());
+        if (maxId == null) {
+            this.id = 1;
+        } else {
+            this.id = maxId.intValue() + 1;
+        }
+
+        this.UpdateDate = System.currentTimeMillis();
+    }
+
     @PrimaryKey
     private int id; // Primary Key
 
@@ -19,30 +33,12 @@ public class MapInfo extends RealmObject implements DBInterface {
     }
 
     private String Version;
-    private Date UpdateDate;
+    private long UpdateDate;
 
     public String getVersion() { return Version;}
     public void  setVersion(String Version) { this.Version =Version;}
 
-    public Date getUpdateDate() { return UpdateDate;}
-    public void setUpdateDate(Date UpdateDate) { this.UpdateDate = UpdateDate; }
+    public long getUpdateDate() { return UpdateDate;}
+    public void setUpdateDate(long UpdateDate) { this.UpdateDate = UpdateDate; }
 
-    @Override
-    public Map<String, Object> toMap() {
-        Map<String,Object> map = new HashMap<>();
-        map.put("Version",Version);
-        map.put("UpdateDate",UpdateDate);
-        return map;
-    }
-
-    @Override
-    public void fromMap(Map<String, Object> map) {
-        Version = (String) map.get("Version");
-        UpdateDate = (Date) map.get("UpdateDate");
-    }
-
-    @Override
-    public Class<MapInfo> getType() {
-        return MapInfo.class;
-    }
 }

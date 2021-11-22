@@ -7,26 +7,27 @@ import io.realm.RealmQuery;
 import io.realm.RealmResults;
 import io.realm.exceptions.RealmException;
 
+import io.realm.RealmObject;
+import io.realm.RealmQuery;
+import io.realm.RealmResults;
+import io.realm.exceptions.RealmException;
+
 public class Delete {
 
-    private Query query = new Query();
-
-    // 單一條件下全刪
-    public String DeleteAllData(Class obj, String fieldName, Object value) throws RealmException {
+    // 單一條件下全刪 ( 含搜尋 )
+    public String SearchAndDeleteAllData(Class obj, String fieldName, Object value) throws RealmException {
 
         String[] fieldNameAdapter = {fieldName};
         Object[] valueAdapter = {value};
 
-        return DeleteAllData(obj, fieldNameAdapter, valueAdapter);
+        return SearchAndDeleteAllData(obj, fieldNameAdapter, valueAdapter);
     }
 
-    // 複數條件下全刪
-    public String DeleteAllData(Class obj, String[] fieldName, Object[] value) throws RealmException {
-        // 指定
-        RealmQuery Query = RealmManager.getRealm().where(obj);
+    // 複數條件下全刪 ( 含搜尋 )
+    public String SearchAndDeleteAllData(Class obj, String[] fieldName, Object[] value) throws RealmException {
 
         // 找出欲刪除的資料
-        RealmResults MyResult = query.SearchData(obj,fieldName,value);
+        RealmResults MyResult = RealmManager.getQuery().SearchData(obj,fieldName,value);
 
         // 開啟任務
         RealmManager.beginTransaction();
@@ -40,27 +41,26 @@ public class Delete {
         return "Success Clear All Data";
     }
 
-    // 條件下第一筆
-    public String DeleteFirstData(Class obj, String fieldName, Object value) throws RealmException {
+    // 條件下第一筆 ( 含搜尋 )
+    public String SearchAndDeleteFirstData(Class obj, String fieldName, Object value) throws RealmException {
 
         String[] fieldNameAdapter = {fieldName};
         Object[] valueAdapter = {value};
 
-        return DeleteAllData(obj, fieldNameAdapter, valueAdapter);
+        return SearchAndDeleteFirstData(obj, fieldNameAdapter, valueAdapter);
     }
 
-    // 複數條件下第一筆
-    public String DeleteFirstData(Class obj, String[] fieldName, Object[] value) throws RealmException {
-        // 指定
-        RealmQuery MyQueue = RealmManager.getRealm().where(obj);
+    // 複數條件下第一筆 ( 含搜尋 )
+    public String SearchAndDeleteFirstData(Class obj, String[] fieldName, Object[] value) throws RealmException {
+
         // 找出欲刪除的資料
-        RealmResults MyResult = query.SearchData(obj,fieldName,value);
+        RealmResults MyResult = RealmManager.getQuery().SearchData(obj,fieldName,value);
 
         // 開啟任務
         RealmManager.beginTransaction();
 
         // 刪除第一個資料
-         MyResult.deleteFirstFromRealm();
+        MyResult.deleteFirstFromRealm();
 
         // 關閉任務
         RealmManager.commitTransaction();
@@ -68,13 +68,53 @@ public class Delete {
         return "Success Clear First Data";
     }
 
+    public void DeleteAllResult(RealmResults result){
+
+        RealmManager.beginTransaction();
+
+        result.deleteAllFromRealm();
+
+        RealmManager.commitTransaction();
+    }
+
+    public void DeleteResultFromIndex(RealmResults result,Integer location){
+
+        RealmManager.beginTransaction();
+
+        result.deleteFromRealm(location);
+
+        RealmManager.commitTransaction();
+    }
+
+    public void DeleteFirstResult(RealmResults result ){
+
+        RealmManager.beginTransaction();
+
+        result.deleteFirstFromRealm();
+
+        RealmManager.commitTransaction();
+    }
+
+    public void DeleteLastResult(RealmResults result ){
+
+        RealmManager.beginTransaction();
+
+        result.deleteLastFromRealm();
+
+        RealmManager.commitTransaction();
+    }
+
+    public void Delete(RealmObject object){
+
+        RealmManager.beginTransaction();
+
+        object.deleteFromRealm();
+
+        RealmManager.commitTransaction();
+    }
+
     // 清空 table
     public String TruncateTable(Class obj , DBInterface Interface, String fieldName, String value) throws RealmException {
-        // 指定
-        RealmQuery MyQueue = RealmManager.getRealm().where(obj);
-        // 找出欲刪除的資料
-        RealmResults MyResult = query.SearchData(obj,fieldName,value);
-
         // 開啟任務
         RealmManager.beginTransaction();
 
@@ -87,3 +127,4 @@ public class Delete {
         return "Success Truncate Table";
     }
 }
+

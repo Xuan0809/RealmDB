@@ -1,12 +1,24 @@
 package com.example.realmdb.DB.Table;
 
+import com.example.realmdb.DB.RealmManager;
+
 import java.util.HashMap;
 import java.util.Map;
 
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
-public class SystemDefault extends RealmObject implements DBInterface {
+public class SystemDefault extends RealmObject  {
+
+    public SystemDefault(){
+        Number maxId =  RealmManager.getQuery().SearchFirstID(this.getClass());
+        if (maxId == null) {
+            this.id = 1;
+        } else {
+            this.id = maxId.intValue() + 1;
+        }
+    }
+
     @PrimaryKey
     private int id; // Primary Key
 
@@ -53,35 +65,4 @@ public class SystemDefault extends RealmObject implements DBInterface {
 
     public String getUnit() {return Unit;}
     public void setUnit(String Unit) {this.Unit = Unit;}
-
-    @Override
-    public Map<String, Object> toMap() {
-        Map<String,Object> map = new HashMap<>();
-        map.put("User",User);
-        map.put("LightStatus",LightStatus);
-        map.put("BackLightLevel",BackLightLevel);
-        map.put("LightMode",LightMode);
-        map.put("UsBackgroundModeer",BackgroundMode);
-        map.put("RidingMode",RidingMode);
-        map.put("GearPosition",GearPosition);
-        map.put("Unit",Unit);
-        return map;
-    }
-
-    @Override
-    public void fromMap(Map<String, Object> map) {
-        User = (String) map.get("User");
-        LightStatus = (boolean) map.get("LightStatus");
-        BackLightLevel = (int) map.get("BackLightLevel");
-        LightMode = (int) map.get("LightMode");
-        BackgroundMode = (int) map.get("BackgroundMode");
-        RidingMode = (int) map.get("RidingMode");
-        GearPosition = (int) map.get("GearPosition");
-        Unit = (String) map.get("Unit");
-    }
-
-    @Override
-    public Class<SystemDefault> getType() {
-        return SystemDefault.class;
-    }
 }

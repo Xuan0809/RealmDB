@@ -3,6 +3,7 @@ package com.example.realmdb.DB.CRUD;
 import com.example.realmdb.DB.RealmManager;
 import com.example.realmdb.DB.Table.DBInterface;
 
+import io.realm.RealmObject;
 import io.realm.exceptions.RealmException;
 
 public class Insert {
@@ -15,5 +16,11 @@ public class Insert {
         RealmManager.commitTransaction();
 
         return "Success";
+    }
+
+    public void InsertOrUpdate(RealmObject obj){
+        RealmManager.beginTransaction();
+        RealmManager.getRealm().copyToRealmOrUpdate(obj);
+        RealmManager.commitTransaction();
     }
 }
